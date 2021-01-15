@@ -1,5 +1,5 @@
-const STATIC_CACHE= 'static-v4';
-const DYNAMIC_CACHE= 'dynamic';
+const STATIC_CACHE= 'static-v9';
+const DYNAMIC_CACHE= 'dynamic-v2';
 
 self.addEventListener('install', function (event) {
     console.log('[Service worker] installing service worker ...', event);
@@ -8,8 +8,9 @@ self.addEventListener('install', function (event) {
             .then(function (cache) {
                 console.log('precaching')
                 return cache.addAll([
-                    // '/',
+                    '/',
                     '/index.html',
+                    '/offline.html',
                     '/src/js/app.js',
                     '/src/js/feed.js',
                     '/src/css/app.css',
@@ -37,24 +38,50 @@ self.addEventListener('activate', function (event) {
     )
     return self.clients.claim();
 })
+// Original Strategy.
+// self.addEventListener('fetch', function (event) {
+//     // console.log('[Service worker] logging fetch event ...', event);
+//
+//     event.respondWith(
+//         caches.match(event.request)
+//             .then((response) => {
+//                 if (response) {
+//                     return response;
+//                 } else {
+//                     return fetch(event.request).then((res) => {
+//                         return caches.open(DYNAMIC_CACHE).then((cachedDynamic) => {
+//                             cachedDynamic.put(event.request.url, res.clone());
+//                             return res;
+//                         })
+//                     }).catch((err) => {
+//                         console.log('err', err);
+//                         return caches.open(STATIC_CACHE)
+//                             .then((staticCache) => {
+//                                 return staticCache.match('/offline.html');
+//                             })
+//                     });
+//                 }
+//             }));
+// })
 
-self.addEventListener('fetch', function (event) {
-    // console.log('[Service worker] logging fetch event ...', event);
+// Network and then cache strategy
+// self.addEventListener('fetch', function (event) {
+//     // console.log('[Service worker] logging fetch event ...', event);
+//
+//     event.respondWith(
+//         fetch(event.request)
+//             .catch((err) => {
+//                 return caches.match(event.request)
+//             }));
+// })
 
-    event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                if (response) {
-                    return response;
-                } else {
-                    return fetch(event.request).then((res) => {
-                        return caches.open(DYNAMIC_CACHE).then((cachedDynamic) => {
-                            cachedDynamic.put(event.request.url, res.clone());
-                            return res;
-                        })
-                    }).catch((err) => {
-                        console.log('err', err);
-                    });
-                }
-            }));
-})
+// // Cache only strategy
+// self.addEventListener('fetch', function (event) {
+//     event.respondWith(caches.match(event.request));
+// })
+
+// //Network only strategy
+// self.addEventListener('fetch', function (event) {
+//     event.respondWith(fetch(event.request));
+// })
+

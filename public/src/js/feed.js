@@ -27,24 +27,43 @@ shareImageButton.addEventListener('click', openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
 
+/* Currently not in use */
+// const onSaveBtnClick = (event) => {
+//     console.log('onSaveBtnClick', event);
+//     if ( 'caches' in window ) {
+//         caches.open('user-requested')
+//             .then((openedCache) => {
+//                 openedCache.add('https://httpbin.org/get');
+//                 openedCache.add('/src/images/sf-boat.jpg');
+//             })
+//     }
+// }
+
 function createCard() {
-    var cardWrapper = document.createElement('div');
+    const cardWrapper = document.createElement('div');
     cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
-    var cardTitle = document.createElement('div');
+    const cardTitle = document.createElement('div');
     cardTitle.className = 'mdl-card__title';
     cardTitle.style.backgroundImage = 'url("/src/images/sf-boat.jpg")';
     cardTitle.style.backgroundSize = 'cover';
     cardTitle.style.height = '180px';
     cardWrapper.appendChild(cardTitle);
-    var cardTitleTextElement = document.createElement('h2');
+    const cardTitleTextElement = document.createElement('h2');
     cardTitleTextElement.style.color = 'white';
     cardTitleTextElement.className = 'mdl-card__title-text';
     cardTitleTextElement.textContent = 'San Francisco Trip';
     cardTitle.appendChild(cardTitleTextElement);
-    var cardSupportingText = document.createElement('div');
+    const cardSupportingText = document.createElement('div');
     cardSupportingText.className = 'mdl-card__supporting-text';
     cardSupportingText.textContent = 'In San Francisco';
     cardSupportingText.style.textAlign = 'center';
+
+    /* Just an example */
+    // const cardSaveBtn = document.createElement('button');
+    // cardSaveBtn.textContent = 'Save';
+    // cardSaveBtn.addEventListener('click', onSaveBtnClick);
+    // cardSupportingText.appendChild(cardSaveBtn);
+
     cardWrapper.appendChild(cardSupportingText);
     componentHandler.upgradeElement(cardWrapper);
     sharedMomentsArea.appendChild(cardWrapper);
